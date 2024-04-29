@@ -1,0 +1,55 @@
+---
+title: "The False Image of Corporate LBGTQ+ Support"
+author: "Zoe Papas"
+date: "03/01/2024"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    code_download: true
+---
+# You see those rainbow commercials during pride month. But do companies actually support what they promote? 
+AT&T and Comcast are both popular telecommunications businesses who, amongst many other companies in the United States, promote a pro-LGBTQ+ image and sponsorship. However, in spite of their outward image, both companies have made large contributions to different anti-LGBTQ+ political campaigns. Below are two graphics that showcase the data between AT&T and Comcast on their benefactions to anti-LGBTQ+ political campaigns.
+
+```{r, warning = FALSE, message = FALSE, include=FALSE}
+# Load any R Packages you may need
+library(tidyverse)
+library(mosaic)
+library(tidytuesdayR)
+library(plotly)
+library(dplyr)
+
+fortune_aggregates <-readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/fortune_aggregates.csv')
+fortune_aggregates2 <- fortune_aggregates[-117,]
+```
+## How do AT&T and Comcast compare in terms of their contributions to anti-queer political campaigns?
+The below graphic (Barplot #1) displays the monetary contributions AT&T and Comcast made to anti-LGBTQ+ political campaigns.  The olive green column takes up the majority of the graphic while the purple column appears to be under half of the size of the green column. This is due to the significant difference in contributions made by each company. In this case, Comcast (in "purple") has donated approximately $121,350 compared to $307,147.50 that AT&T (in "olive green") donated to anti-LGBTQ+ political campaigns. In other terms, AT&T donated approximately 2.5 times, or $185,797.50, more money to anti-LGBTQ+ political campaigns than Comcast donated
+
+In Barplot #2, we are able to see the exact amount of politicians to which each corparation made contributions. Comcast (in "purple") appeared to donate their total of $121,350 to 40 politician as displayed in this graphic. Meanwhile, AT&T ("in olive green") has donated to 67 politicians' anti-LGBTQ+ political campaigns. 
+
+Using the data from both of these displays, we are able to get the mean amount of money donated by AT&T to each of these politicians, which would be a mean of $4,584.29 donated per politician, on average. This means that Comcast donated, on average, a little more than 1.5 times the amount of money to each politician compared to Comcast (with a mean donation of $3,033.75 per politician).  
+
+Both these companies donated notably large sums of money to anti-LGBTQ+ political campaigns, however, it appears that between Comcast and AT&T, AT&T has made more contributions to anti-queer politicians on average than Comcast.
+
+```{r, warning = FALSE, message = FALSE}
+# Codes
+ggplotly(fortune_aggregates %>%
+  filter(Company %in% c("Comcast", "AT&T")) %>%
+  ggplot(aes(x = Company, y= `Total Contributed`)) + geom_col(fill= c("darkolivegreen", "darkorchid4")) + labs(title= "Barplot #1: Comast's and AT&T's Monetary Contributions to Anti-queer Political Campaigns", x= "Pride Sponsor Company", y= "Amount Contributed to Anti-queer Political Campaigns (in dollars)" ) + theme(text=element_text(family="Times New Roman", face="bold", size=10)))
+
+ggplotly(fortune_aggregates %>%
+  filter(Company %in% c("Comcast", "AT&T")) %>%
+  ggplot(aes(x = Company, y= `# of Politicians Contributed to`)) + geom_col(fill= c("darkolivegreen", "darkorchid4")) + labs(title="Barplot #2: Comast's and AT&T's Contributions to Anti-queer Political Campaigns", x = "Pride Sponsor Company", y= "Number of Politcians to which Company Contributed") + theme(text=element_text(family="Times New Roman", face="bold", size=10))) 
+
+ggplotly(fortune_aggregates2 %>%
+  ggplot(aes(x= `# of Politicians Contributed to`)) + geom_histogram(color= "lavender",fill="darkorchid") + labs(title= "Frequency of Contributions made to Politicians", x="Number of Politicians to which Companies Contributed", y= "Frequency") + theme(text=element_text(family="Times New Roman", face="bold", size=10))) 
+```
+## Are AT&T and Comcast the only ones?
+AT&T and Comcast are not the only companies who donate largely to anti-LGBTQ+ political campaigns. The histogram above displays the frequency of the number of Politicians to which about 116 companies donated. The most common frequency was 1 at a frequency of 37, meaning that 37 companies each donated to one politician. 
+
+The overall data is right skewed, which means that most of companies contributed to lower numbers of politicians who led anti-LGBTQ+ campaigns (typically between 1 and 9). However, if we were to look at AT&T and Comcast on this histogram, we can see that they have donated to significantly more politicians individually than other corporations. AT&T's plot at 67 could be interrupted as a potential outlier, while Comcast's plot at 40 could be interrupted as a point that deviates from the norm of the data (not necessarily an outlier). 
+
+As a result, this histogram allows us to showcase the drastically different contributions these two  telecommunications companies make to anti-queer politicians in comparison to other companies on a visual level. And so while these two companies may not be the only ones donating to anti-queer politicians, in this data set, Comcast and AT&T appear to stand out as some of the largest contributor's to anti-LGBTQ+ politicians within the United States.
+
+Links:https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/fortune_aggregates.csv'
